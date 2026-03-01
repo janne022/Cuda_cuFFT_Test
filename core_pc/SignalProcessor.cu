@@ -1,55 +1,39 @@
 ﻿#include "SignalProcessor.h"
 
-int main() {
-	// Create a vector of cufftComplex with 8 elements
-	thrust::host_vector<cufftComplex> radarSignal(8);
+void SignalProcessor::analyzeBatch(const std::vector<int> &hostData) {
+  int N = hostData.size();
 
-	// Fill with values representing aplitude over time
-	for (size_t i = 0; i < radarSignal.size(); i++)
-	{
-		if (i < 4)
-		{
-			radarSignal[i].x = 1.0f;
-			radarSignal[i].y = 0.0f;
-		}
-		if (i >= 4)
-		{
-			radarSignal[i].x = 0.0f;
-			radarSignal[i].y = 0.0f;
-		}
-	}
+  // To GPU
+  thrust::device_vector<float> gpuData = hostData;
+  thrust::device_vector<cufftComplex> complexVector(N);
 
-	std::cout << "Filled values:\n";
-	for (size_t i = 0; i < radarSignal.size(); i++)
-	{
-		std::cout << "Slot " << i << ": Real=" << radarSignal[i].x << ", Imag=" << radarSignal[i].y << "\n";
-	}
+  // Float to Complex
+  thrust::transform(gpuData.begin(), gpuData.end(), complexVector.begin(),
+                    FloatToComplex());
 
-	// Move to GPU
-	thrust::device_vector<cufftComplex> gpuData = radarSignal;
+  // Create plan for cufft
+  cufftHandle plan;
+  cufftPlan1d(&plan, N, CUFFT_C2C, 1);
 
-	// Handle calculation plan
-	cufftHandle plan;
+  // Run plan
+  cufftExecC2C(plan, thrust::raw_pointer_cast(complexVector.data()),
+               thrust::raw_pointer_cast(complexVector.data()), CUFFT_FORWARD);
 
-	cufftPlan1d(&plan, radarSignal.size(), CUFFT_C2C, 1);
+  // Clean up
+  cufftDestroy(plan);
 
-	cufftComplex* gpuPtr = thrust::raw_pointer_cast(gpuData.data());
+  thrust::device_vector<float> magnitudes(N);
 
-	// Convert time domain to frequency domain
-	cufftExecC2C(plan, gpuPtr, gpuPtr, CUFFT_FORWARD);
+  thrust::transform(complexVector.begin(), complexVector.end(),
+                    magnitudes.begin(), ComplexToMagnitude());
 
-	// Copy back over to host
-	radarSignal = gpuData;
+  auto max_iter =
+      thrust::max_element(magnitudes.begin() + 1, magnitudes.begin() + N / 2);
 
-	// Clean up
-	cufftDestroy(plan);
+  int peakBin = max_iter - magnitudes.begin();
 
-	std::cout << "Frequency domain results:\n";
-	for (size_t i = 0; i < radarSignal.size(); i++)
-	{
-		std::cout << "Slot " << i << ": Real=" << radarSignal[i].x << ", Imag=" << radarSignal[i].y << "\n";
-	}
+  float peakMagnitude = *max_iter;
 
-	return 0;
-}
-
+  std::cout << "Strongest signal in bin: " << peakBin
+            << " | Magnitude: " << peakMagnitude << std::endl;
+};

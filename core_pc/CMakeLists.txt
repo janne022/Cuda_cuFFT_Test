@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.18)
+﻿cmake_minimum_required(VERSION 4.2.3)
 
 # Compiler setup
 set(CUDAToolkit_ROOT "/opt/cuda")
