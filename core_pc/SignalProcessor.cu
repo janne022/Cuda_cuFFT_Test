@@ -1,6 +1,6 @@
 ﻿#include "SignalProcessor.h"
 
-void SignalProcessor::analyzeBatch(const std::vector<int> &hostData) {
+float SignalProcessor::analyzeBatch(const std::vector<int> &hostData) {
   int N = hostData.size();
 
   // To GPU
@@ -34,6 +34,7 @@ void SignalProcessor::analyzeBatch(const std::vector<int> &hostData) {
 
   float peakMagnitude = *max_iter;
 
-  std::cout << "Strongest signal in bin: " << peakBin
-            << " | Magnitude: " << peakMagnitude << std::endl;
+  std::cout << "Target Magnitude: " << peakMagnitude << std::endl;
+
+  return peakMagnitude;
 };

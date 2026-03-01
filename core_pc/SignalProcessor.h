@@ -30,5 +30,5 @@ struct ComplexToMagnitude {
 
 class SignalProcessor{
     public:
-    void analyzeBatch(const std::vector<int>& hostData);
+    float analyzeBatch(const std::vector<int>& hostData);
 };

@@ -47,3 +47,7 @@ std::vector<int> UsbLink::readBatch(const int &batchSize) {
   };
   return batch;
 };
+
+void UsbLink::sendCommand(char cmd){
+    ssize_t bytesWritten = write(fileDescriptor, &cmd, 1);
+}
