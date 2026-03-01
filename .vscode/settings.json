@@ -1,0 +1,7 @@
+{
+    "cmake.generator": "Ninja",
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/build",
+        "--query-driver=/usr/bin/g++,/usr/bin/gcc,/opt/cuda/bin/nvcc"
+    ]
+}

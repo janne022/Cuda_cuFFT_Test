@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <thrust/detail/raw_pointer_cast.h>
 #include <vector>
 #include <cufft.h>
 #include <cuda_runtime.h>
@@ -30,30 +31,24 @@ int main() {
 		std::cout << "Slot " << i << ": Real=" << radarSignal[i].x << ", Imag=" << radarSignal[i].y << "\n";
 	}
 
-	// Calculate bytes and allocate it
-	int numBytes = radarSignal.size() * sizeof(cufftComplex);
-
-	cufftComplex* gpuData = nullptr;
-
-	cudaMalloc((void**)&gpuData, numBytes);
-
-	// Copy over to gpu
-	cudaMemcpy(gpuData, radarSignal.data(), numBytes, cudaMemcpyHostToDevice);
+	// Move to GPU
+	thrust::device_vector<cufftComplex> gpuData = radarSignal;
 
 	// Handle calculation plan
 	cufftHandle plan;
 
 	cufftPlan1d(&plan, radarSignal.size(), CUFFT_C2C, 1);
 
+	cufftComplex* gpuPtr = thrust::raw_pointer_cast(gpuData.data());
+
 	// Convert time domain to frequency domain
-	cufftExecC2C(plan, gpuData, gpuData, CUFFT_FORWARD);
+	cufftExecC2C(plan, gpuPtr, gpuPtr, CUFFT_FORWARD);
 
 	// Copy back over to host
-	cudaMemcpy(radarSignal.data(), gpuData, numBytes, cudaMemcpyDeviceToHost);
+	radarSignal = gpuData;
 
 	// Clean up
 	cufftDestroy(plan);
-	cudaFree(gpuData);
 
 	std::cout << "Frequency domain results:\n";
 	for (size_t i = 0; i < radarSignal.size(); i++)

@@ -1,12 +1,14 @@
 ﻿cmake_minimum_required(VERSION 3.18)
 
-# 1. Initialize project with C++ and CUDA
+set(CUDAToolkit_ROOT "/opt/cuda")
+set(CMAKE_CUDA_COMPILER "/opt/cuda/bin/nvcc")
+
 project(CudaTest LANGUAGES CXX CUDA)
 
-# 2. Create the executable
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_executable(CudaTest CudaTest.cu)
 
-# 3. Force C++17 (Thrust needs this)
 set_target_properties(CudaTest PROPERTIES
     CXX_STANDARD 20
     CUDA_STANDARD 20
@@ -14,6 +16,5 @@ set_target_properties(CudaTest PROPERTIES
     CUDA_STANDARD_REQUIRED ON
 )
 
-# 4. Link the cuFFT library
 find_package(CUDAToolkit REQUIRED)
 target_link_libraries(CudaTest PRIVATE CUDA::cufft)
