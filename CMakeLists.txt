@@ -1,12 +1,19 @@
-﻿cmake_minimum_required(VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.18)
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+# 1. Initialize project with C++ and CUDA
+project(CudaTest LANGUAGES CXX CUDA)
 
-project ("CudaTest" LANGUAGES CXX CUDA)
+# 2. Create the executable
+add_executable(CudaTest CudaTest.cu)
 
-# Include sub-projects.
-add_subdirectory ("CudaTest")
+# 3. Force C++17 (Thrust needs this)
+set_target_properties(CudaTest PROPERTIES
+    CXX_STANDARD 20
+    CUDA_STANDARD 20
+    CXX_STANDARD_REQUIRED ON
+    CUDA_STANDARD_REQUIRED ON
+)
+
+# 4. Link the cuFFT library
+find_package(CUDAToolkit REQUIRED)
+target_link_libraries(CudaTest PRIVATE CUDA::cufft)

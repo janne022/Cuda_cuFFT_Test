@@ -414,3 +414,5 @@ CMakeUserPresets.json
 
 # External projects
 *-prefix/
+
+.cmake/
