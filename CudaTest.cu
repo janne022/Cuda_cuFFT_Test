@@ -1,45 +1,65 @@
 ﻿#include <iostream>
 #include <vector>
-#include "cuda_runtime.h"
-#include "device_launch_parameters.h"
-
-// 1. THE KERNEL (Runs on the GPU)
-__global__ void MultiplyOnGPU(int* deviceArray) {
-    int myThreadID = threadIdx.x; 
-    deviceArray[myThreadID] = deviceArray[myThreadID] * 10;
-}
+#include <cufft.h>
+#include <cuda_runtime.h>
+#include <thrust/device_vector.h>
+#include <thrust/host_vector.h>
 
 int main() {
-    const int arraySize = 5;
-    const int bytesToAllocate = arraySize * sizeof(int); 
+	// Create a vector of cufftComplex with 8 elements
+	thrust::host_vector<cufftComplex> radarSignal(8);
 
-    // A. Create Host (CPU) Data
-    std::vector<int> cpuData = { 1, 2, 3, 4, 5 };
-    int* gpuData = nullptr;
+	// Fill with values representing aplitude over time
+	for (size_t i = 0; i < radarSignal.size(); i++)
+	{
+		if (i < 4)
+		{
+			radarSignal[i].x = 1.0f;
+			radarSignal[i].y = 0.0f;
+		}
+		if (i >= 4)
+		{
+			radarSignal[i].x = 0.0f;
+			radarSignal[i].y = 0.0f;
+		}
+	}
 
-    // B. Allocate Device (GPU) Memory
-    cudaMalloc((void**)&gpuData, bytesToAllocate);
+	std::cout << "Filled values:\n";
+	for (size_t i = 0; i < radarSignal.size(); i++)
+	{
+		std::cout << "Slot " << i << ": Real=" << radarSignal[i].x << ", Imag=" << radarSignal[i].y << "\n";
+	}
 
-    // C. Copy CPU -> GPU
-    cudaMemcpy(gpuData, cpuData.data(), bytesToAllocate, cudaMemcpyHostToDevice);
-    std::cout << "Data sent to GPU...\n";
+	// Calculate bytes and allocate it
+	int numBytes = radarSignal.size() * sizeof(cufftComplex);
 
-    // D. Launch Kernel: 1 Block, 5 Threads
-    MultiplyOnGPU<<<1, arraySize>>>(gpuData);
-    cudaDeviceSynchronize(); 
-    std::cout << "GPU finished crunching numbers!\n";
+	cufftComplex* gpuData = nullptr;
 
-    // E. Copy GPU -> CPU
-    cudaMemcpy(cpuData.data(), gpuData, bytesToAllocate, cudaMemcpyDeviceToHost);
+	cudaMalloc((void**)&gpuData, numBytes);
 
-    // F. Clean up GPU Memory
-    cudaFree(gpuData);
+	// Copy over to gpu
+	cudaMemcpy(gpuData, radarSignal.data(), numBytes, cudaMemcpyHostToDevice);
 
-    // G. Print Results
-    std::cout << "--- Final Results ---\n";
-    for (int i = 0; i < arraySize; i++) {
-        std::cout << "Slot " << i << ": " << cpuData[i] << "\n";
-    }
+	// Handle calculation plan
+	cufftHandle plan;
 
-    return 0;
+	cufftPlan1d(&plan, radarSignal.size(), CUFFT_C2C, 1);
+
+	// Convert time domain to frequency domain
+	cufftExecC2C(plan, gpuData, gpuData, CUFFT_FORWARD);
+
+	// Copy back over to host
+	cudaMemcpy(radarSignal.data(), gpuData, numBytes, cudaMemcpyDeviceToHost);
+
+	// Clean up
+	cufftDestroy(plan);
+	cudaFree(gpuData);
+
+	std::cout << "Frequency domain results:\n";
+	for (size_t i = 0; i < radarSignal.size(); i++)
+	{
+		std::cout << "Slot " << i << ": Real=" << radarSignal[i].x << ", Imag=" << radarSignal[i].y << "\n";
+	}
+
+	return 0;
 }
