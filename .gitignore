@@ -408,6 +408,9 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+build/
+bin/
+*.cmake
 
 ### CMake Patch ###
 CMakeUserPresets.json
@@ -415,4 +418,5 @@ CMakeUserPresets.json
 # External projects
 *-prefix/
 
-.cmake/
+# Platformio
+.pio

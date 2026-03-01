@@ -1,3 +1,27 @@
-Diagnostics:
-  Suppress: 
-    - "typename_nested_not_found"
+CompileFlags:
+  CompilationDatabase: "build"
+  Add: 
+    - "-xcuda"
+    - "--cuda-gpu-arch=sm_86"
+    - "--cuda-path=/opt/cuda"
+    - "-D__CUDACC__"
+    - "-D__NVCC__"
+    - "-isystem"
+    - "/usr/include/c++/15.2.1"
+    - "-isystem"
+    - "/usr/include/c++/15.2.1/x86_64-pc-linux-gnu"
+    - "-isystem"
+    - "/usr/include/c++/15.2.1/backward"
+    - "-isystem"
+    - "/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include"
+    - "-isystem"
+    - "/opt/cuda/include"
+    - "-isystem"
+    - "/opt/cuda/targets/x86_64-linux/include"
+  Remove: 
+    - -forward-unknown-to-host-compiler
+    - --generate-code*
+    - -rdc*
+    - -resource-dir*
+    - --ccbin*
+    - -m64

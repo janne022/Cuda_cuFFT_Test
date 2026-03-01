@@ -1,7 +1,10 @@
 {
     "cmake.generator": "Ninja",
     "clangd.arguments": [
-        "--compile-commands-dir=${workspaceFolder}/build",
-        "--query-driver=/usr/bin/g++,/usr/bin/gcc,/opt/cuda/bin/nvcc"
-    ]
+    "--query-driver=/usr/bin/g++", 
+    "--all-scopes-completion",
+    "--completion-style=detailed",
+    "--header-insertion=never"
+],
+    "cmake.sourceDirectory": "/home/fusion/repos/Cuda_cuFFT_Test/core_pc",
 }

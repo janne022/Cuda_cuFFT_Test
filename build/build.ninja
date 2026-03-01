@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: CudaTest
+# Project: GridReader
 # Configurations: Debug
 # =============================================================================
 
@@ -41,48 +41,69 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /home/fusion/repos/Cuda_cuFFT_Test/build/
 # =============================================================================
-# Object build statements for EXECUTABLE target CudaTest
+# Object build statements for EXECUTABLE target GridReader
 
 
 #############################################
-# Order-only phony target for CudaTest
+# Order-only phony target for GridReader
 
-build cmake_object_order_depends_target_CudaTest: phony || .
+build cmake_object_order_depends_target_GridReader: phony || .
 
-build CMakeFiles/CudaTest.dir/CudaTest.cu.o: CUDA_COMPILER__CudaTest_unscanned_Debug /home/fusion/repos/Cuda_cuFFT_Test/CudaTest.cu || cmake_object_order_depends_target_CudaTest
+build CMakeFiles/GridReader.dir/main.cpp.o: CXX_COMPILER__GridReader_unscanned_Debug /home/fusion/repos/Cuda_cuFFT_Test/core_pc/main.cpp || cmake_object_order_depends_target_GridReader
   CONFIG = Debug
-  DEP_FILE = CMakeFiles/CudaTest.dir/CudaTest.cu.o.d
-  FLAGS = -g -std=c++20 "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
-  INCLUDES = -isystem /opt/cuda/targets/x86_64-linux/include -isystem /opt/cuda/targets/x86_64-linux/include/cccl
-  OBJECT_DIR = CMakeFiles/CudaTest.dir
-  OBJECT_FILE_DIR = CMakeFiles/CudaTest.dir
-  TARGET_SUPPORT_DIR = CMakeFiles/CudaTest.dir
+  DEP_FILE = CMakeFiles/GridReader.dir/main.cpp.o.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -I/home/fusion/repos/Cuda_cuFFT_Test/core_pc/. -isystem /opt/cuda/targets/x86_64-linux/include -isystem /opt/cuda/targets/x86_64-linux/include/cccl
+  OBJECT_DIR = CMakeFiles/GridReader.dir
+  OBJECT_FILE_DIR = CMakeFiles/GridReader.dir
+  TARGET_SUPPORT_DIR = CMakeFiles/GridReader.dir
+
+build CMakeFiles/GridReader.dir/UsbLink.cpp.o: CXX_COMPILER__GridReader_unscanned_Debug /home/fusion/repos/Cuda_cuFFT_Test/core_pc/UsbLink.cpp || cmake_object_order_depends_target_GridReader
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/GridReader.dir/UsbLink.cpp.o.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -I/home/fusion/repos/Cuda_cuFFT_Test/core_pc/. -isystem /opt/cuda/targets/x86_64-linux/include -isystem /opt/cuda/targets/x86_64-linux/include/cccl
+  OBJECT_DIR = CMakeFiles/GridReader.dir
+  OBJECT_FILE_DIR = CMakeFiles/GridReader.dir
+  TARGET_SUPPORT_DIR = CMakeFiles/GridReader.dir
+
+build CMakeFiles/GridReader.dir/SignalProcessor.cu.o: CUDA_COMPILER__GridReader_unscanned_Debug /home/fusion/repos/Cuda_cuFFT_Test/core_pc/SignalProcessor.cu || cmake_object_order_depends_target_GridReader
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/GridReader.dir/SignalProcessor.cu.o.d
+  FLAGS = -g -std=c++20 "--generate-code=arch=compute_75,code=[compute_75,sm_75]" --generate-code=arch=compute_75,code=sm_75 --generate-code=arch=compute_86,code=sm_86 -forward-unknown-to-host-compiler
+  INCLUDES = -I/home/fusion/repos/Cuda_cuFFT_Test/core_pc/. -isystem /opt/cuda/targets/x86_64-linux/include -isystem /opt/cuda/targets/x86_64-linux/include/cccl
+  OBJECT_DIR = CMakeFiles/GridReader.dir
+  OBJECT_FILE_DIR = CMakeFiles/GridReader.dir
+  TARGET_SUPPORT_DIR = CMakeFiles/GridReader.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target CudaTest
+# Link build statements for EXECUTABLE target GridReader
 
 
 #############################################
-# Link the executable CudaTest
+# Link the executable GridReader
 
-build CudaTest: CUDA_EXECUTABLE_LINKER__CudaTest_Debug CMakeFiles/CudaTest.dir/CudaTest.cu.o | /opt/cuda/lib/libcufft.so
+build GridReader: CXX_EXECUTABLE_LINKER__GridReader_Debug CMakeFiles/GridReader.dir/main.cpp.o CMakeFiles/GridReader.dir/UsbLink.cpp.o CMakeFiles/GridReader.dir/SignalProcessor.cu.o | /opt/cuda/lib/libcufft.so
   CONFIG = Debug
-  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
-  LINK_LIBRARIES = /opt/cuda/lib/libcufft.so  -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
-  OBJECT_DIR = CMakeFiles/CudaTest.dir
+  DEP_FILE = CMakeFiles/GridReader.dir/link.d
+  FLAGS = -g
+  LINK_FLAGS = -Xlinker --dependency-file=CMakeFiles/GridReader.dir/link.d
+  LINK_LIBRARIES = -Wl,-rpath,/opt/cuda/lib  /opt/cuda/lib/libcufft.so  -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  LINK_PATH = -L/opt/cuda/targets/x86_64-linux/lib/stubs   -L/opt/cuda/targets/x86_64-linux/lib
+  OBJECT_DIR = CMakeFiles/GridReader.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = CudaTest
-  TARGET_PDB = CudaTest.dbg
-  TARGET_SUPPORT_DIR = CMakeFiles/CudaTest.dir
+  TARGET_FILE = GridReader
+  TARGET_PDB = GridReader.dbg
+  TARGET_SUPPORT_DIR = CMakeFiles/GridReader.dir
 
 
 #############################################
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/fusion/repos/Cuda_cuFFT_Test/build && /usr/bin/ccmake -S/home/fusion/repos/Cuda_cuFFT_Test -B/home/fusion/repos/Cuda_cuFFT_Test/build
+  COMMAND = cd /home/fusion/repos/Cuda_cuFFT_Test/build && /usr/bin/ccmake -S/home/fusion/repos/Cuda_cuFFT_Test/core_pc -B/home/fusion/repos/Cuda_cuFFT_Test/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -94,7 +115,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/fusion/repos/Cuda_cuFFT_Test/build && /usr/bin/cmake --regenerate-during-build -S/home/fusion/repos/Cuda_cuFFT_Test -B/home/fusion/repos/Cuda_cuFFT_Test/build
+  COMMAND = cd /home/fusion/repos/Cuda_cuFFT_Test/build && /usr/bin/cmake --regenerate-during-build -S/home/fusion/repos/Cuda_cuFFT_Test/core_pc -B/home/fusion/repos/Cuda_cuFFT_Test/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -112,7 +133,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/fusion/repos/Cuda_cuFFT_Test/build
 
-build all: phony CudaTest
+build all: phony GridReader
 
 # =============================================================================
 # Built-in targets
@@ -121,14 +142,14 @@ build all: phony CudaTest
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja /home/fusion/repos/Cuda_cuFFT_Test/build/cmake_install.cmake: RERUN_CMAKE | /home/fusion/repos/Cuda_cuFFT_Test/CMakeLists.txt /usr/share/cmake/Modules/CMakeCUDAInformation.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake/Modules/CheckLibraryExists.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/Compiler/NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Compiler/NVIDIA.cmake /usr/share/cmake/Modules/FindCUDAToolkit.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindThreads.cmake /usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux-NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.3/CMakeCUDACompiler.cmake CMakeFiles/4.2.3/CMakeCXXCompiler.cmake CMakeFiles/4.2.3/CMakeSystem.cmake
+build build.ninja /home/fusion/repos/Cuda_cuFFT_Test/build/cmake_install.cmake: RERUN_CMAKE | /home/fusion/repos/Cuda_cuFFT_Test/core_pc/CMakeLists.txt /usr/share/cmake/Modules/CMakeCUDAInformation.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake/Modules/CheckLibraryExists.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/Compiler/NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Compiler/NVIDIA.cmake /usr/share/cmake/Modules/FindCUDAToolkit.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindThreads.cmake /usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake/Modules/Linker/GNU-CXX.cmake /usr/share/cmake/Modules/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux-NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.3/CMakeCUDACompiler.cmake CMakeFiles/4.2.3/CMakeCXXCompiler.cmake CMakeFiles/4.2.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/fusion/repos/Cuda_cuFFT_Test/CMakeLists.txt /usr/share/cmake/Modules/CMakeCUDAInformation.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake/Modules/CheckLibraryExists.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/Compiler/NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Compiler/NVIDIA.cmake /usr/share/cmake/Modules/FindCUDAToolkit.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindThreads.cmake /usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux-NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.3/CMakeCUDACompiler.cmake CMakeFiles/4.2.3/CMakeCXXCompiler.cmake CMakeFiles/4.2.3/CMakeSystem.cmake: phony
+build /home/fusion/repos/Cuda_cuFFT_Test/core_pc/CMakeLists.txt /usr/share/cmake/Modules/CMakeCUDAInformation.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/CheckCXXSourceCompiles.cmake /usr/share/cmake/Modules/CheckIncludeFileCXX.cmake /usr/share/cmake/Modules/CheckLibraryExists.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/Compiler/NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Compiler/NVIDIA.cmake /usr/share/cmake/Modules/FindCUDAToolkit.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindThreads.cmake /usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake /usr/share/cmake/Modules/Linker/GNU-CXX.cmake /usr/share/cmake/Modules/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux-NVIDIA-CUDA.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.3/CMakeCUDACompiler.cmake CMakeFiles/4.2.3/CMakeCXXCompiler.cmake CMakeFiles/4.2.3/CMakeSystem.cmake: phony
 
 
 #############################################
