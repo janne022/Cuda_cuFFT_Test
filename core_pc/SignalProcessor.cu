@@ -1,6 +1,6 @@
 ﻿#include "SignalProcessor.h"
 
-float SignalProcessor::analyzeBatch(const std::vector<int> &hostData) {
+PeakData SignalProcessor::analyzeBatch(const std::vector<int> &hostData) {
   int N = hostData.size();
 
   // To GPU
@@ -27,14 +27,19 @@ float SignalProcessor::analyzeBatch(const std::vector<int> &hostData) {
   thrust::transform(complexVector.begin(), complexVector.end(),
                     magnitudes.begin(), ComplexToMagnitude());
 
+  // Skip bin 0 to filter noise.
   auto max_iter =
       thrust::max_element(magnitudes.begin() + 1, magnitudes.begin() + N / 2);
 
   int peakBin = max_iter - magnitudes.begin();
-
   float peakMagnitude = *max_iter;
 
-  std::cout << "Target Magnitude: " << peakMagnitude << std::endl;
+  // Calculate current frequency.
+  float sampleRate = 500.0f;
+  float binWidth = sampleRate / N;
+  float peakFrequency = peakBin * binWidth;
 
-  return peakMagnitude;
+  std::cout << "Target Magnitude: " << peakMagnitude << " | Detected Frequency: " << peakFrequency << std::endl;
+
+  return {peakMagnitude, peakFrequency};
 };

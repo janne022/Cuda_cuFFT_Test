@@ -1,9 +1,10 @@
-#include "UsbLink.h"
 #include "SignalProcessor.h"
+#include "UsbLink.h"
 #include <iostream>
 
 int main() {
-    try {
+  try {
+
     UsbLink antenna("/dev/ttyACM1");
     SignalProcessor processor;
 
@@ -16,26 +17,30 @@ int main() {
 
     // Capture loop
     while (true) {
-        std::vector<int> rawData = antenna.readBatch(1024);
+      std::vector<int> rawData = antenna.readBatch(1024);
 
-    std::cout << "Captured " << rawData.size() << " samples." << std::endl;
+      std::cout << "Captured " << rawData.size() << " samples." << std::endl;
 
-    float targetStrength = processor.analyzeBatch(rawData);
+      PeakData targetStrength = processor.analyzeBatch(rawData);
 
-    if (!targetLocked && targetStrength > TURN_ON_THRESHOLD) {
+      // Capture around 50hz that is stronger than 25k magnitude
+      bool isLoudEnough = targetStrength.magnitude > TURN_ON_THRESHOLD;
+      bool isCorrectHz = (targetStrength.frequency > 48.0f && targetStrength.frequency < 52.0f);
+
+      // Turn LED on or off if there is a spike at any frequency
+      if (!targetLocked && isLoudEnough && isCorrectHz) {
         targetLocked = true;
         antenna.sendCommand('A');
-    }
-    else if (targetLocked && targetStrength < TURN_OFF_THRESHOLD) {
+      } else if (targetLocked && targetStrength.magnitude < TURN_OFF_THRESHOLD) {
         targetLocked = false;
         antenna.sendCommand('S');
+      }
+      std::cout << "----" << std::endl;
     }
-    std::cout << "----" << std::endl;
-    }
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
+  } catch (const std::exception &e) {
+    std::cerr << "Error: " << e.what() << std::endl;
+    return 1;
+  }
 
-    return 0;
+  return 0;
 }

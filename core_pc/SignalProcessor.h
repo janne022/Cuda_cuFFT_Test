@@ -28,7 +28,12 @@ struct ComplexToMagnitude {
     }
 };
 
+struct PeakData{
+    float magnitude;
+    float frequency;
+};
+
 class SignalProcessor{
     public:
-    float analyzeBatch(const std::vector<int>& hostData);
+    PeakData analyzeBatch(const std::vector<int>& hostData);
 };
