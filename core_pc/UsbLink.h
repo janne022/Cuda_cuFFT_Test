@@ -12,6 +12,7 @@ private:
 
 public:
   UsbLink(const std::string &portName);
+  ~UsbLink();
   std::vector<int> readBatch(const int &batchSize);
 
   void sendCommand(char cmd);

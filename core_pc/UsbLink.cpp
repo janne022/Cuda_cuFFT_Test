@@ -1,4 +1,5 @@
 #include "UsbLink.h"
+#include <unistd.h>
 
 UsbLink::UsbLink(const std::string &portName) {
 
@@ -25,6 +26,13 @@ UsbLink::UsbLink(const std::string &portName) {
   tcsetattr(fileDescriptor, TCSANOW, &tty);
   tcflush(fileDescriptor, TCIFLUSH);
 };
+
+UsbLink::~UsbLink() {
+    // If the fileDescriptor is valid. Free it by closing the fileDescriptor.
+    if (fileDescriptor > 0) {
+        close(fileDescriptor);
+    }
+}
 
 std::vector<int> UsbLink::readBatch(const int &batchSize) {
   std::vector<int> batch;
