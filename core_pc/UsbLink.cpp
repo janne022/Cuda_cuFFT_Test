@@ -1,5 +1,4 @@
 #include "UsbLink.h"
-#include <unistd.h>
 
 UsbLink::UsbLink(const std::string &portName) {
 
